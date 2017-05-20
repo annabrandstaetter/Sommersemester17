@@ -1,9 +1,9 @@
 .PHONY: all
 
-CFLAGS = -std=c99 -pthread -Werror -Wall
+FLAGS = -std=c99 -Werror -Wall
 all:
-	gcc $(CFLAGS) -o shmread fifo_shm_read.c -lrt
-	gcc $(CFLAGS) -o shmwrite fifo_shm_write.c -lrt
+	gcc $(FLAGS) -o ex11 ex01_1.c
+	gcc $(FLAGS) -o ex12 ex01_2.c
 
 clean:
-	rm shmread shmwrite
+	rm ex11 ex12
