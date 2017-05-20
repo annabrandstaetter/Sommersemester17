@@ -1,2 +1,2 @@
-# Sommersemester17
-Lösungen zu PS Aufgaben
+# C exercises
+practicing with IPC (pipes, fifos, shared memory, semaphores), fork and exec, signals
