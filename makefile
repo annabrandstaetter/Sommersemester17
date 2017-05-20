@@ -1,14 +1,9 @@
 .PHONY: all
 
-FLAGS = -Wall -Werror -std=c99
+CFLAGS = -std=c99 -pthread -Werror -Wall
 all:
-	gcc $(FLAGS) -o data database.c
-	gcc $(FLAGS) -o middle middleware.c
-	gcc $(FLAGS) -o web webserver.c
-	gcc $(FLAGS) -o service service.c
+	gcc $(CFLAGS) -o shmread fifo_shm_read.c -lrt
+	gcc $(CFLAGS) -o shmwrite fifo_shm_write.c -lrt
 
 clean:
-	rm data middle web service
-
-rmpipes:
-	rm middleware webserver database
+	rm shmread shmwrite
