@@ -1,9 +1,7 @@
-.PHONY: all
+.PHONY: magic
 
-FLAGS = -std=c99 -pthread -Werror -Wall
-all:
-	gcc $(FLAGS) -o ex21 ex02_1.c
-	gcc $(FLAGS) -o ex22 ex02_2.c
+CFLAGS= -std=c99
 
-clean:
-	rm ex21 ex22
+magic:
+	gcc -o orakel orakel.c
+	gcc -o ich ich.c
