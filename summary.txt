@@ -1,0 +1,78 @@
+FORK PROCESSES:
+- include unistd.h for fork
+- include sys/wait.h for wait
+- returns 0 if in child or pid of child when in parent
+- wait for child process to finish with wait(pid) or wait(0)
+- wait for all children with (while(wait(0)>0) because -1 returned when no children left
+- get own pid with getpid()
+- exit(0) to send 0 to e.g. waitpid of parent, exits process
+
+SIGNALS:
+- include headers for fork and wait
+- send signals with kill(pid, SIGNAL)
+- alarm(sec) sends SIGALRM signal to calling process in sec seconds
+- sighandler:
+	- struct sigaction 
+	- initialize sa_flags member with 0
+	- use sigemptyset to empty sa_mask member
+	- give adress of void function(int)) to sa_handler
+	- sigaction(SIGNAL, &(sigaction struct), NULL) installs sighandler for SIGNAL
+blocking signals:
+	- sigset_t type needed
+	- sigemptyset before using it
+	- sigaddset(&set, SIGNAL) 
+	- block with sigprocmask(SIG_BLOCK, &set, NULL) (then SIG_UNBLOCK)
+
+PIPES:
+- needs int array of length 2
+- pipe(array) initializes two filedescriptors, read at [0], write at [1]
+- write and read with write and read
+- all filedescriptors are inherited by child processes
+- close unneeded ends for various reasons
+
+EXEC:
+- create pipe, fork child, close unneeded ends, dup2 read to STDIN_FILENO, write to STDOUT_FILENO, close this ends too and exec process
+- close with close
+- dup: returns fd which points to same as first (and only) fd argument; returns lowest available fd, not the one we may wish!
+- dup2: duplicates first argument to second, so second points to same as first
+- exec: 
+	- execlp takes e.g. "grep" (searches command in PATH), "grep" and "foo" (executes grep foo), arguments have to end with NULL
+	- execvp takes the same, but with null-terminated *char[] array
+	- may need /bin/grep instead
+	- execv and execl same, but with /bin/grep 
+
+FIFO:
+- include unistd, fcntl, sys/stat
+- create FIFO with mkfifo("name")
+- open FIFO with "name" and flags (O_RDONLY, O_WRONLY, O_RDWRONLY, O_NONBLOCK), returns fd
+- write and read with fd, char[] and sizeof(char[])
+- look at more FIFOs with select:
+	- need fd_set variable
+	- empty with FD_ZERO
+	- add fd with FD_SET(fd, &set);
+	- select(max of fds + 1, &set to watch to read, &set to watch to write, &set exceptions, timeval struct to timeout
+	- select changes set, so clear and add in loop, check if in it with FD_ISSET(fd, &set)
+
+POSIX SHARED MEMORY
+- define _GNU_SOURCE
+- include fcntl, unistd, sys/stat, sys/mman
+- open with shm_open: name, (O_CREAT|) O_RDWR, 0666; returns fd
+- ftruncate to wished sized (initial 0) with fd, size
+- map to actual process with mmap: NULL, size, PROT_READ|PROT_WRITE, MAP_SHARED (when it should be shared memory), fd and 0; returns ptr to shm
+- unmap with munmap: ptr, size
+- unlink with shm_unlink: with "name"
+- close fd
+
+POSIX SEMAPHORES
+- include semaphore
+- open with sem_open: "name", O_CREAT, 0666, initial sem value; returns sem_t*
+- sem_wait waits till value >0 and then decreases value in sem (-1)
+- sem_post increases value (+1)
+
+
+
+
+
+
+
+
