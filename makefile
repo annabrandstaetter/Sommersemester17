@@ -1,7 +1,6 @@
-.PHONY: magic
+.PHONY: all
 
-CFLAGS= -std=c99
-
-magic:
-	gcc -o orakel orakel.c
-	gcc -o ich ich.c
+FLAGS = -std=c99 -pthread
+all:
+	gcc $(FLAGS) -o client exam_ps_bs.c -lrt
+	gcc $(FLAGS) -o server exam_ps_bs_server.c -lrt
